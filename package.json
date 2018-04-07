@@ -10,6 +10,7 @@
     "lodash": "^4.6.1",
     "minimist": "^1.2.0",
     "protobufs": "^0.1.0",
-    "protocol-buffers": "~4.0.4"
+    "protocol-buffers": "~4.0.4",
+    "sleep": "^5.1.1"
   }
 }

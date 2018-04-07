@@ -15,7 +15,7 @@
 */
 // trace agent
 require('@google-cloud/trace-agent').start({
-    projectId: 'ygrinshteyn-sandbox'
+    projectId: 'thegrinch-project'
   });
 
 // grpc stuff
@@ -44,7 +44,9 @@ app.get('/', (req, res) => {
     }
     client.sayHello({name: user}, function(err, response) {
         if (err){
-            console.log("could not connect to grpc server");
+            console.log("could not get grpc response");
+            res.send("could not get grpc response");
+            return;
         }
         console.log('Greeting:', response.message);
         res.send("grpc response is " + response.message);

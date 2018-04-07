@@ -17,18 +17,27 @@
  */
 
 require('@google-cloud/trace-agent').start({
-  projectId: 'ygrinshteyn-sandbox'
+  projectId: 'thegrinch-project'
 }); //Stackdriver Trace Agent
 
 var PROTO_PATH = __dirname + '/helloworld.proto'
 
 var grpc = require('grpc');
 var hello_proto = grpc.load(PROTO_PATH).helloworld;
+var sleep = require('sleep');
+
+/** 
+ * implements a random integer generator
+ */
+function getRandomInt(max) {
+  return Math.floor(Math.random() * Math.floor(max));
+}
 
 /**
  * Implements the SayHello RPC method.
  */
 function sayHello(call, callback) {
+  sleep.sleep(getRandomInt(5));
   callback(null, {message: 'Hello ' + call.request.name});
 }
 
