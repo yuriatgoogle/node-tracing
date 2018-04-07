@@ -16,6 +16,10 @@
  *
  */
 
+require('@google-cloud/trace-agent').start({
+  projectId: 'ygrinshteyn-sandbox'
+}); //Stackdriver Trace Agent
+
 var PROTO_PATH = __dirname + '/helloworld.proto'
 
 var grpc = require('grpc');

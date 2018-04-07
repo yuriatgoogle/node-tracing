@@ -38,14 +38,18 @@ app.get('/', (req, res) => {
     var user;
     if (process.argv.length >= 3) {
         user = process.argv[2];
+        console.log("user is " + user);
     } else {
         user = 'world';
     }
     client.sayHello({name: user}, function(err, response) {
+        if (err){
+            console.log("could not connect to grpc server");
+        }
         console.log('Greeting:', response.message);
         res.send("grpc response is " + response.message);
+    
         });
-    //return response
     });
 
 // Start the server
