@@ -13,10 +13,6 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 */
-// trace agent
-require('@google-cloud/trace-agent').start({
-    projectId: 'thegrinch-project'
-  });
 
 // grpc stuff
 var protobuf = require('protobufs');
@@ -35,13 +31,8 @@ app.get('/', (req, res) => {
     
     // make grpc call to grpc server - localhost on port 50051
     var client = new hello_proto.Greeter('localhost:50051', grpc.credentials.createInsecure());
-    var user;
-    if (process.argv.length >= 3) {
-        user = process.argv[2];
-        console.log("user is " + user);
-    } else {
-        user = 'world';
-    }
+    var user = 'Yuri'
+
     client.sayHello({name: user}, function(err, response) {
         if (err){
             console.log("could not get grpc response");
