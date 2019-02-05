@@ -26,24 +26,48 @@ console.log("hello_proto: " + hello_proto)
 const express = require('express');
 const app = express();
 
+var tracing = require('@opencensus/nodejs');
+var stackdriver = require('@opencensus/exporter-stackdriver');
+var projectID = 'ygrinshteyn-sandbox';
+
+// create Stackdriver exporter
+var exporter = new stackdriver.StackdriverTraceExporter({projectId: projectID});
+
+// start Stackdriver exporter
+tracing.registerExporter(exporter).start();
+
+// start tracing and set sampling rate
+const tracer = tracing.start({samplingRate: 1}).tracer;
+
+
 app.get('/', (req, res) => {
+
     console.log('Inbound request received!');
-    
-    // make grpc call to grpc server - localhost on port 50051
+    // set grpc options
     var client = new hello_proto.Greeter('localhost:50051', grpc.credentials.createInsecure());
     var user = 'Yuri'
 
-    client.sayHello({name: user}, function(err, response) {
-        if (err){
-            console.log("could not get grpc response");
-            res.send("could not get grpc response");
-            return;
-        }
-        console.log('Greeting:', response.message);
-        res.send("grpc response is " + response.message);
-    
+    // create root span
+    tracer.startRootSpan({name: 'main'}, rootSpan => {
+        // code to be traced goes in here:
+        rootSpan.addAnnotation('main span');
+        // make grpc call
+        const grpcCallSpan = tracer.startChildSpan('grpcCall');
+        grpcCallSpan.start();
+        client.sayHello({name: user}, function(err, response) {
+            if (err){
+                console.log("could not get grpc response");
+                res.send("could not get grpc response");
+                return;
+            }
+            console.log('Greeting:', response.message);
+            res.send("grpc response is " + response.message);
         });
+        grpcCallSpan.end();
+        // end root span
+        rootSpan.end();
     });
+}); // end app.get
 
 // Start the server
 const PORT = process.env.PORT || 8080;
