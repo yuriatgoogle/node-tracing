@@ -44,7 +44,9 @@ app.get('/', (req, res) => {
 
     console.log('Inbound request received!');
     // set grpc options
-    var client = new hello_proto.Greeter('localhost:50051', grpc.credentials.createInsecure());
+    var backendHost = process.env.BACKENDHOST;
+    var backendPort = process.env.BACKENDPORT;
+    var client = new hello_proto.Greeter(backendHost + ':' + backendPort, grpc.credentials.createInsecure());
     var user = 'Yuri'
 
     // create root span

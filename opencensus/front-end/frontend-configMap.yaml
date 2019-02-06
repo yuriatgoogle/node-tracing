@@ -1,0 +1,10 @@
+piVersion: v1
+data:
+  BACKENDHOST: backendService
+  BACKENDPORT: 8080
+kind: ConfigMap
+metadata:
+  name: frontend-configmap
+  namespace: default
+  resourceVersion: "1"
+  selfLink: /api/v1/namespaces/default/configmaps/frontend-configmap
