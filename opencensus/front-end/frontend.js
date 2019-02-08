@@ -63,11 +63,10 @@ app.get('/', (req, res) => {
                 return;
             }
             console.log('Greeting:', response.message);
+            grpcCallSpan.end();
+            rootSpan.end();
             res.send("grpc response is " + response.message);
         });
-        grpcCallSpan.end();
-        // end root span
-        rootSpan.end();
     });
 }); // end app.get
 

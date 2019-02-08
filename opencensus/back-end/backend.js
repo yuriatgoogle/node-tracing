@@ -33,8 +33,9 @@ function getRandomInt(max) {
  * Implements the SayHello RPC method.
  */
 function sayHello(call, callback) {
-  sleep.sleep(getRandomInt(5));
-  callback(null, {message: 'Hello ' + call.request.name});
+  var sleepDelay = getRandomInt(5);
+  sleep.sleep(sleepDelay);
+  callback(null, {message: 'Slept for  ' + sleepDelay + ' seconds'});
 }
 
 /**
